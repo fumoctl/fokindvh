@@ -177,20 +177,18 @@ where
 	predet.idproducto <> 687	 ---  VIDRIO DEL CLIENTE
 	and pre.estadopresupuesto <> 2   ---  facturado
 	and	pre.nrofactura is not null   ---  facturado
-	and pre.fechafacturacion >= '2026-03-01 00:00:00' 
-	and pre.fechafacturacion <= '2026-03-31 23:59:59'
-	--- solo presupuestos que tengan al menos un item cuyo codigo incluya 'DVH'
-	--- (incluye TODO el presupuesto, no solo la fila con DVH)
+	--- incluir SOLO presupuestos que tengan al menos una fila con DVH en codigo
+	--- (se filtra por presupuesto completo, no por fila individual)
 	and exists (
 		select 1
-		from presupuestodetalle pdd
-		left join producto pddpro on pddpro.id = pdd.idproducto
-		where pdd.idpresupuesto = pre.id
-		  and (case 
-		  		when pddpro.tipo_producto = 'ANEXO' 
-		  			then concat(pddpro.codigo, '-', pddpro.descripcion)
-		  		else pddpro.codigo
-		  	end) like '%DVH%'
+		from presupuestodetalle predetdvh
+		left join producto prodvh on prodvh.id = predetdvh.idproducto
+		where predetdvh.idpresupuesto = pre.id
+		  and case 
+				when prodvh.tipo_producto = 'ANEXO' 
+					then concat(prodvh.codigo, '-', prodvh.descripcion) 
+				else prodvh.codigo 
+			  end ilike '%DVH%'
 	)
  order by pre.fechafacturacion, pro.codigo
  -------------------------------------------------------------------------------------------------------------
