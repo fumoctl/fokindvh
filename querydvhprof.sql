@@ -17,6 +17,9 @@ concat(' ', '|') as sep1,
 case when (max(otra.esplancha)= 'SI') then 'SI' else '-' end as esplancha, --7
 case when (max(otra.tienecorte)= 'SI') then 'SI' else '-' end  as tienecorte, --8
 coalesce(max(otra.nCorte), 0) as nCorte, --9
+coalesce(max(presu.cantidad), 0.0) as cantidad,
+coalesce(max(presu.ancho), 0.0) as ancho,
+coalesce(max(presu.alto), 0.0) as alto,
 coalesce(max(presu.m2), 0.0) as m2 , --10
 coalesce(max(presu.preciom2),0.0) as preciom2 , --12
 coalesce(max(presu.precioplancha), 0.0) as precioplancha, --13
@@ -105,6 +108,13 @@ case
 end as codigo,
 
 -- pro.codigo,
+
+case 
+	when pro.tipo_producto = 'VIDRIO' then coalesce(predet.cantidad, 0.0)
+	else 0.0
+end as cantidad,
+coalesce(predet.ancho, 0.0) as ancho,
+coalesce(predet.alto, 0.0) as alto,
 
 (predet.metros2 * predet.cantidad) as m2,
 predet.preciom2,
