@@ -274,7 +274,7 @@ on presu.idpresu = otra.idpresu and presu.clave = otra.clave
 where  
 
 -- presu.idpresu = 101408 
- presu.fechafacturacion >= '2026-03-01 00:00:00' and  presu.fechafacturacion <= '2026-03-31 23:59:59'
+ presu.fechafacturacion >= '2023-10-01 00:00:00' and  presu.fechafacturacion <= '2023-12-31 23:59:59'
 
 group by  presu.idpresudet, presu.nrofactura, otra.estado
 order by presu.nrofactura, presu.idpresudet
